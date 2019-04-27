@@ -1,0 +1,22 @@
+.tabs {
+   border: 1px solid red;
+   &__controls {
+      display: flex;
+   }
+   &__control {
+      background-color: transparent;
+      border: none;
+      font-size: 1rem;
+      padding: 1rem;
+      &_active {
+         background-color: aqua;
+      }
+   }
+   &__content-item {
+      display: none;
+      min-height: 200px;
+      &_active {
+         display: inherit;
+      }
+   }
+}
