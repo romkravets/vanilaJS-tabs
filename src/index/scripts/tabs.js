@@ -2,30 +2,33 @@ const ACTIVE_CONTROL_CLASS_NAME = 'tabs__control_active'
 const ACTIVE_CONTENT_CLASS_NAME = 'tabs__content-item_active'
 
 export function tabs() {
+ const controls = Array.from(document.querySelectorAll('.tabs__control')).reduce((obj, control) => {
+   obj[control.getAttribute('data-control-for')] = control;
+   return obj;
+ }, {});
+ const contentItems = Array.from(document.querySelectorAll('.tabs__content-item')).reduce((obj, contentItem) => {
+   obj[contentItem.getAttribute('data-content-name')] = contentItem;
+   return obj;
+ }, {});
+ console.log(contentItems);
 
- const controls = Array.from(document.querySelectorAll('.tabs__control'));
- const contentItems = Array.from(document.querySelectorAll('.tabs__content-item'));
- let selectedItem = {
-    control: document.querySelector(`.${ACTIVE_CONTROL_CLASS_NAME}`),
-    content: document.querySelector(`.${ACTIVE_CONTENT_CLASS_NAME}`),
- }
+ let selectedItemName = document
+   .querySelector(`.${ACTIVE_CONTROL_CLASS_NAME}`)
+   .getAttribute('data-control-for');
 
  function clickHandler() {
-   const selectedContentItem = contentItems.filter((contentItem) => {
-      return contentItem.getAttribute('data-content-name') === this.getAttribute('data-control-for');
-   })[0];
-   console.log(selectedContentItem);
-   selectedItem.control.classList.remove(ACTIVE_CONTROL_CLASS_NAME);
-   selectedItem.content.classList.remove(ACTIVE_CONTENT_CLASS_NAME);
+   const currentElementName = this.getAttribute('data-control-for');
+   const selectedContentItem = contentItems[currentElementName];
+
+   controls[selectedItemName].classList.remove(ACTIVE_CONTROL_CLASS_NAME);
+   contentItems[selectedItemName].classList.remove(ACTIVE_CONTENT_CLASS_NAME);
 
    selectedContentItem.classList.add(ACTIVE_CONTENT_CLASS_NAME);
    this.classList.add(ACTIVE_CONTROL_CLASS_NAME );
-   selectedItem = {
-      control: this,
-      content: selectedContentItem,
-   };
+   selectedItemName = currentElementName
+
  }
-   for (const control of controls) {
-      control.addEventListener('click', clickHandler);
+   for (const key in controls) {
+      controls[key].addEventListener('click', clickHandler);
    }
 }
